@@ -8,12 +8,12 @@ const auth = require('./authenticate-middleware.js');
 
 function genWebToken(user) {
     const payload = {
-        id: user.id,
+        subject: user.id,
         username: user.username
     };
 
     const options = {
-        expiresIn: 120
+        expiresIn: "2h"
     };
 
     const token = jwt.sign(payload, secrets.jwtSecret, options);
@@ -33,6 +33,9 @@ router.post('/register', (req, res) => {
             let newToken = genWebToken(added);
             res.status(201).json({ message: 'User added', token: newToken });
         })
+        // .then(response => {
+        //     res.headers.authorization = response;
+        // })
 
         .catch(err => {
             res.status(500).json({ message: 'Could not add the user', err });
@@ -50,10 +53,10 @@ router.post('/login', (req, res) => {
     if (username && password) {
         User.findUser({ username })
         .first()
-        .then(found => {
-            if (found && bcrypt.compareSync(password, found.password)) {
-                let newToken = genWebToken(found);
-                res.status(200).json({ message: `welcome ${found.username}`, token: newToken });
+        .then(user => {
+            if (user && bcrypt.compareSync(password, user.password)) {
+                let token = genWebToken(user);
+                res.status(200).json({ message: `welcome ${user.username}`, token: token });
             } else {
                 res.status(401).json({ message: 'Invalid user and or user credentials' });
             }
