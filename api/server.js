@@ -1,19 +1,30 @@
 const express = require('express');
+const cors = require('cors');
 const helmet = require('helmet');
 
+
+
 // const usersRouter = require('./usersRouter.js');
-const authRouter = require('../auth/authRouter.js');
 // const businessRouter = require('./businessRouter.js');
 // const marketRouter = require('./marketRouter.js');
+const authRouter = require('../auth/authRouter.js');
+const authenticate = require('../auth/authenticate-middleware.js');
+
+
 
 const server = express();
 
 server.use(helmet());
+server.use(cors());
 server.use(express.json());
 
-// server.use('/api/users', usersRouter);
 server.use('/api/auth', authRouter);
-// server.use('/api/business', businessRouter);
-// server.use('/api/market', marketRouter);
+// server.use('/api/users', usersRouter);
+// server.use('/api/business', authenticate, businessRouter);
+// server.use('/api/market', authenticate, marketRouter);
+
+server.get('/', (req, res) => {
+    res.status(201).json({ message: 'Welcome to the API!'})
+})
 
 module.exports = server;

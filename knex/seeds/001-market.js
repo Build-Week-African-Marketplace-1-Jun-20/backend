@@ -1,13 +1,24 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('market').del()
+  return knex('market').truncate()
     .then(function () {
       // Inserts seed entries
       return knex('market').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
+        {
+            item: 'watermelon ',
+            description: 'fruit',
+            location: 'place of hold',
+            price: '$10.00',
+            business_id: '1'
+        },
+        {
+            item: 'place mats',
+            description: 'placeholder description',
+            location: 'new place',
+            price: '$1.00',
+            business_id: '2'
+        }
       ]);
     });
 };

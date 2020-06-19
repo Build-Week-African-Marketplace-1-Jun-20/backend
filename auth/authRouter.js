@@ -1,11 +1,10 @@
-const express = require('express');
+const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const secrets = require('../data/secrets.js');
 const User = require('./auth-model.js');
+const secrets = require('../data/secrets.js');
 const auth = require('./authenticate-middleware.js');
 
-const router = express.Router();
 
 function genWebToken(user) {
     const payload = {
@@ -14,7 +13,7 @@ function genWebToken(user) {
     };
 
     const options = {
-        expiresIn: '2h'
+        expiresIn: 120
     };
 
     const token = jwt.sign(payload, secrets.jwtSecret, options);
