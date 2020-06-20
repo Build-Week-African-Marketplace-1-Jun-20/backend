@@ -43,4 +43,43 @@ const userInfo = req.body;
 });
 
 
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const businessInfo = req.body;
+    
+    db('business').where({ id: Number(id) }).update(businessInfo)
+    .then(data => {
+            if (data) {
+                res.status(200).json({ message: "Updated business information"});
+            } else {
+                res.status(404).json({ message: "The business with the specified ID does not exist." });
+            }
+        })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({
+            error: "The information could not be retrieved."
+        });
+    });
+});
+
+
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+    
+    db('business').where({ id: Number(id) }).del()
+    .then(count => {
+        if (count > 0) {
+            res.status(200).json({message: "The requested business has been removed."});
+        } else {
+            res.status(404).json({ message: "The business with the specified ID does not exist." });
+        }
+        })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({ message: "Error Retrieving The Requested Data." });
+    });
+});
+
+
 module.exports = router;

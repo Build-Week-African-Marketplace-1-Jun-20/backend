@@ -3,7 +3,10 @@ const db = require('../data/config/config.js');
 module.exports = {
     addUser,
     getUsers,
-    findUser
+    findUser,
+    getUserId,
+    updateUser,
+    removeUser
 };
 
 function addUser(user) {
@@ -16,4 +19,20 @@ function getUsers() {
 
 function findUser(username) {
     return db('users').where(username);
+}
+
+function getUserId(id) {
+  return db('users').where({ user_id: Number(id) });
+}
+
+function updateUser(id, user) {
+  return db('users')
+    .where({ user_id: Number(id) })
+    .update(user);
+}
+
+function removeUser(id) {
+  return db('users')
+    .where({ user_id: Number(id) })
+    .del();
 }

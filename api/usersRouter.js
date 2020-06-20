@@ -1,48 +1,74 @@
-// const express = require('express');
-// const knex = require('knex');
+const express = require('express');
+const db = require('../data/config/config.js');
+const Users = require('../auth/auth-model.js');
 
-// const db = require('../data/config/config.js');
+const router = express.Router();
 
-// const router = express.Router();
-
-// router.get('/', (req, res) => {
-//     db('users')
-//     .then(data => {
-//         res.json(data); 
-//     })
-//     .catch (error => {
-//         res.status(500).json({ message: 'Failed to retrieve data', error });
-//     });
-// });
-
-
-// router.get('/:id', (req, res) => {
-// const { id } = req.params;
-
-//     db('users').where({ id }).first()
-//     .then(data => {
-//         res.json(data);
-//     }) 
-//     .catch (error => {
-//         res.status(500).json({ message: 'Failed to retrieve data', error });
-//     });
-// });
+router.get('/', (req, res) => {
+    Users.getUsers()
+    .then(data => {
+        res.json(data); 
+    })
+    .catch (error => {
+        res.status(500).json({ message: 'Failed to retrieve data', error });
+    });
+});
 
 
-// router.post('/', (req, res) => {
-// const userInfo = req.body;
+router.get('/:id', (req, res) => {
+    Users.getUserId(req.params.id)
+        .then(data => {
+            if (data) {
+                res.status(200).json(data);
+            } else {
+                res.status(404).json({
+                    message: "The user with the specified ID does not exist."
+                });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({
+                error: "The users information could not be retrieved."
+            });
+        });
+});
 
-//     db('users').insert(userInfo)
-//     .then(ids => {
-//         db('users').where({ id: ids[0] })
-//         .then(newUser => {
-//             res.status(201).json(newUser);
-//         });
-//     })
-//     .catch (error => {
-//         res.status(500).json({ message: "Failed to store data", error });
-//     });
-// });
+
+router.delete('/:id', (req, res) => {
+    Users.removeUser(req.params.id)
+        .then(count => {
+            if (count > 0) {
+                res.status(200).json({message: "The requested user has been removed."});
+            } else {
+                res.status(404).json({ message: "The user with the specified ID does not exist." });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ message: "Error Retrieving The Requested Data." });
+        });
+});
+
+router.put('/:id', (req, res) => {
+    const userInfo = req.body;
+    Users.updateUser(req.params.id, userInfo)
+    .then(data => {
+            if (data) {
+                res.status(200).json({ message: "Updated user information"});
+            } else {
+                res.status(404).json({
+                    message: "The user with the specified ID does not exist."
+                });
+            }
+        })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({
+            error: "The users information could not be retrieved."
+        });
+    });
+})
 
 
-// module.exports = router;
+module.exports = router;
