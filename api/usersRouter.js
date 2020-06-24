@@ -1,6 +1,8 @@
 const express = require('express');
 const db = require('../data/config/config.js');
 const Users = require('../auth/auth-model.js');
+const authenticate = require('../auth/authenticate-middleware.js');
+
 
 const router = express.Router();
 
@@ -35,7 +37,7 @@ router.get('/:id', (req, res) => {
 });
 
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticate, (req, res) => {
     Users.removeUser(req.params.id)
         .then(count => {
             if (count > 0) {
@@ -50,7 +52,7 @@ router.delete('/:id', (req, res) => {
         });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticate, (req, res) => {
     const userInfo = req.body;
     Users.updateUser(req.params.id, userInfo)
     .then(data => {

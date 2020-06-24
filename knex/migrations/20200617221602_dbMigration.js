@@ -2,6 +2,7 @@ exports.up = function(knex) {
     return knex.schema
         .createTable('users', users => {
             users.increments('user_id').primary;
+            users.string('name', 255);
             users
                 .string('username', 255)
                 .unique()

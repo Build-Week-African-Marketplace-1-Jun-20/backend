@@ -18,9 +18,9 @@ server.use(cors());
 server.use(express.json());
 
 server.use('/api/auth', authRouter);
-server.use('/api/users', authenticate, userRouter);
-server.use('/api/business', authenticate, businessRouter);
-server.use('/api/market', authenticate, marketRouter);
+server.use('/api/users', userRouter);
+server.use('/api/business', businessRouter);
+server.use('/api/market', marketRouter);
 
 server.get('/', (req, res) => {
     res.status(201).json({ message: 'Welcome to the API!'})

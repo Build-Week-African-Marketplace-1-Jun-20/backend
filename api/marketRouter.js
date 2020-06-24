@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../data/config/config.js');
+const authenticate = require('../auth/authenticate-middleware.js');
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ const { id } = req.params;
 });
 
 
-router.post('/', (req, res) => {
+router.post('/', authenticate, (req, res) => {
 const itemInfo = req.body;
 
     db('market').insert(itemInfo)
@@ -43,7 +44,7 @@ const itemInfo = req.body;
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticate, (req, res) => {
     const { id } = req.params;
     const itemInfo = req.body;
     
@@ -64,7 +65,7 @@ router.put('/:id', (req, res) => {
 });
 
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticate, (req, res) => {
     const { id } = req.params;
     
     db('market').where({ id: Number(id) }).del()
