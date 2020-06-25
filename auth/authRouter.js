@@ -55,7 +55,8 @@ router.post('/login', (req, res) => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 let token = genWebToken(user);
                 console.log('bk: /login: token: ', token);
-                res.status(200).json({ message: `welcome ${user.username}`, token: token });
+                res.status(200).json(token);
+                // res.status(200).json({ message: `welcome ${user.name}`, token: token });
             } else {
                 res.status(401).json({ message: 'Invalid user and or user credentials' });
             }
