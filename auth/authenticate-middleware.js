@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const secrets = require('../data/secrets.js');
 
 module.exports = (req, res, next) => {
-    const token = req.headers.authorization;
+    const token = req.headers['authorization']
     console.log('bk: auth-middleware: token: ', token);
 
     if (typeof token !== 'undefined') {

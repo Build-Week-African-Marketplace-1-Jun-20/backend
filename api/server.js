@@ -12,17 +12,16 @@ const marketRouter = require('./marketRouter.js');
 
 const server = express();
 
-
-server.use(helmet());
 server.use(cors());
+server.use(helmet());
 server.use(express.json());
 
-server.use('/api/auth', authRouter);
-server.use('/api/users', userRouter);
-server.use('/api/business', businessRouter);
-server.use('/api/market', marketRouter);
+server.use('/api/auth', cors(), authRouter);
+server.use('/api/users', cors(), userRouter);
+server.use('/api/business', cors(), businessRouter);
+server.use('/api/market', cors(), marketRouter);
 
-server.get('/', (req, res) => {
+server.get('/', cors(), (req, res) => {
     res.status(201).json({ message: 'Welcome to the API!'})
 })
 
